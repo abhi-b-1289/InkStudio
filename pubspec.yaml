@@ -1,0 +1,43 @@
+name: inkstudio_workspace
+description: "Melos workspace root for the InkStudio Flutter app."
+publish_to: 'none'
+
+environment:
+  sdk: ^3.12.0
+
+workspace:
+  - app
+
+dev_dependencies:
+  melos: ^8.2.2
+
+melos:
+  command:
+    bootstrap:
+      runPubGetInParallel: true
+
+  scripts:
+    analyze:
+      run: melos exec -- "flutter analyze"
+
+    format:
+      run: dart format --set-exit-if-changed .
+
+    test:
+      run: melos exec -- "flutter test"
+
+    generate:
+      run: melos exec -- "dart run build_runner build --delete-conflicting-outputs"
+
+    generate:watch:
+      run: melos exec -- "dart run build_runner watch --delete-conflicting-outputs"
+
+    clean:
+      run: melos exec -- "flutter clean"
+
+    verify:
+      run: |
+        melos run format
+        melos run analyze
+        melos run test
+

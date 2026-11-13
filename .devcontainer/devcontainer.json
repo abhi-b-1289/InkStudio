@@ -1,0 +1,29 @@
+{
+  "name": "InkStudio (Flutter + Android Emulator)",
+
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "inkstudio",
+  "workspaceFolder": "/workspace",
+
+  "shutdownAction": "none",
+
+  "postStartCommand": "adb devices",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter",
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "dart.flutterSdkPath": "/opt/flutter",
+        "dart.sdkPath": "/opt/flutter/bin/cache/dart-sdk",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+
+  "remoteUser": "dev"
+}

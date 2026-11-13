@@ -1,0 +1,67 @@
+services:
+  inkstudio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FLUTTER_VERSION: "3.44.0"
+
+        USER_UID: "${UID:-1000}"
+        USER_GID: "${GID:-1000}"
+
+    container_name: inkstudio-dev
+
+    working_dir: /workspace
+
+    entrypoint: /usr/local/bin/dev-entrypoint.sh
+    command: bash
+
+    user: dev
+
+    volumes:
+
+      - .:/workspace
+
+      - flutter-pub-cache:/home/dev/.pub-cache
+
+      - gradle-cache:/home/dev/.gradle
+
+      - android-sdk:/opt/android-sdk
+
+      - android-avd:/home/dev/.android
+
+    environment:
+      FLUTTER_HOME: /opt/flutter
+      ANDROID_SDK_ROOT: /opt/android-sdk
+      ANDROID_HOME: /opt/android-sdk
+
+      PUB_CACHE: /home/dev/.pub-cache
+
+      FLUTTER_SUPPRESS_ANALYTICS: "true"
+
+    devices:
+      - /dev/kvm
+
+    group_add:
+      - "109"
+
+    ports:
+
+      - "6080:6080"
+
+      - "5900:5900"
+
+      - "5555:5555"
+      - "5554:5554"
+
+    stdin_open: true
+    tty: true
+
+    security_opt:
+      - seccomp=unconfined
+
+volumes:
+  flutter-pub-cache:
+  gradle-cache:
+  android-sdk:
+  android-avd:

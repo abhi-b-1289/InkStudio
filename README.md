@@ -1,78 +1,213 @@
 # InkStudio
 
-InkStudio is an offline-capable, cross-platform vector drawing and sketching application built with Flutter. It combines freehand drawing tools, customizable geometric shapes, interactive gamified quests (InkQuest), and multi-format vector exports.
+## Project Members
 
----
+  -----------------------------------------------------------------------------------------------------
+  Name          --          Student ID        --      GitHub
+  ----------------------- ----------------------- -----------------------------------------------------
+  Arnob Mutsuddy          (666-63-01)               [Arnob-Mutsuddy](https://github.com/Arnob-Mutsuddy)
+
+  Abhijeet Barua          (666-63-16)               [abhi-b-1289](https://github.com/abhi-b-1289)
+
+  -----------------------------------------------------------------------------------------------------
+
+InkStudio is an offline-capable, cross-platform vector drawing and
+sketching app built with Flutter. It combines freehand drawing tools,
+parametric shapes with precise measurement controls, selection and
+transform tools, SVG/PNG export, guided drawing practice, and the
+gamified **InkQuest** mode.
+
+A prebuilt Android package is included at `InkStudio.apk`.
+
+------------------------------------------------------------------------
 
 ## Features
 
-- **Freehand Canvas**: Smooth vector brush engine with pressure simulation, eraser, undo/redo, and color palettes.
-- **Parametric Shapes**: Add and manipulate lines, rectangles, circles, stars, polygons, and custom geometry with exact dimension/measurement controls.
-- **Selection & Transform**: Move, scale, duplicate, group/ungroup, and rotate canvas elements with ease.
-- **Export Capabilities**:
-  - Scalable Vector Graphics (**SVG**) export.
-  - Multi-resolution raster export (**PNG** at 1x, 2x HD, and 4x Ultra HD).
-- **InkQuest Game Mode**: Built-in gamified drawing practice quests with shape matching, accuracy scoring, achievements, and player progress.
-- **Presets & Sizing**: Canvas presets for social media, print, and custom aspect ratios in landscape or portrait.
-- **Containerized Environment**: Full Docker and Dev Container configurations included for reproducible development and Android emulator testing.
+-   **Freehand canvas**: Pen and eraser with adjustable stroke width, a
+    quick color palette, recent colors, undo, and redo.
+-   **Parametric shapes**: Line, arrow, rectangle, rounded rectangle,
+    circle, ellipse, triangle, right triangle, diamond, pentagon,
+    hexagon, star, heart, and cross. Shapes support fill/stroke colors
+    and exact dimension controls.
+-   **Selection & transform**: Multi-select, lasso selection, move,
+    resize, rotate, duplicate, group, and ungroup.
+-   **Export**: Download drawings as SVG or PNG at 1x, 2x, or 4x
+    resolution, with platform-aware download handling for web and native
+    targets.
+-   **Learn Drawing**: Guided tracing practice for circles, triangles,
+    stars, hearts, smileys, and waves, scored by SVG similarity.
+-   **InkQuest**: Trace, Copy, and Memory challenge tiers, challenge
+    packs, star ratings, coins, XP and levels, daily challenges,
+    streaks, achievements, a drawing gallery, and a shop for color packs
+    and canvas themes.
+-   **Canvas presets**: 1:1, 16:9, 4:3, 3:2, 4:5, 21:9, A4, and US
+    Letter, with portrait/landscape toggling and custom ratio detection.
+-   **Recent drawings**: In-memory recent drawing list with rename and
+    delete actions.
+-   **Containerized development**: Docker and Dev Container setup with
+    Flutter 3.44.0, the Android SDK and emulator, and a noVNC display.
 
----
+------------------------------------------------------------------------
 
-## Architecture Overview
+## Project Structure
 
-```
+``` text
 InkStudio/
-├── app/                  # Main Flutter application package
+├── app/                                  # Flutter application (Melos workspace member)
 │   ├── lib/
-│   │   ├── controllers/  # State & canvas manipulation controllers
-│   │   ├── models/       # Data models (canvas items, shapes, quests)
-│   │   ├── painters/     # Custom painters for stroke & shape rendering
-│   │   ├── screens/      # Canvas, Home, Learn, and Quest game pages
-│   │   ├── services/     # SVG document parser, similarity, PNG export
-│   │   └── widgets/      # Canvas controls, tool docks, and game widgets
-│   ├── android/          # Native Android configuration & manifests
-│   └── web/              # Web entry point and PWA manifests
-├── docker/               # Container scripts & dev entrypoints
-├── .devcontainer/        # VS Code Remote Container configuration
-├── Dockerfile            # Container definition with Flutter & Android SDK
-├── docker-compose.yml    # Development environment service definition
-└── pubspec.yaml          # Melos workspace configuration
+│   │   ├── main.dart                     # Application entry point
+│   │   ├── app.dart                      # MaterialApp and theme setup
+│   │   ├── controllers/
+│   │   │   └── canvas_controller.dart    # Tools, selection, transforms, undo/redo
+│   │   ├── core/
+│   │   │   ├── app_constants.dart        # Colors, palette, and UI constants
+│   │   │   └── formatters.dart           # Shared formatting helpers
+│   │   ├── data/
+│   │   │   ├── achievement_catalog.dart  # Achievement definitions
+│   │   │   ├── quest_catalog.dart        # Quest challenge packs
+│   │   │   ├── quest_references.dart     # Quest reference drawings
+│   │   │   └── shop_catalog.dart         # Color packs and canvas themes
+│   │   ├── models/
+│   │   │   ├── achievement.dart
+│   │   │   ├── canvas_item.dart          # Strokes, groups, and shape items
+│   │   │   ├── canvas_preset.dart        # Canvas size presets
+│   │   │   ├── practice_target.dart      # Learn Drawing targets
+│   │   │   ├── quest.dart                # Quest tiers and challenges
+│   │   │   ├── saved_drawing.dart
+│   │   │   ├── score.dart                # Scores and gallery entries
+│   │   │   ├── shape.dart                # Shape types and geometry
+│   │   │   └── shop.dart                 # Color packs and themes
+│   │   ├── painters/
+│   │   │   ├── canvas_painters.dart      # Canvas rendering
+│   │   │   ├── practice_painters.dart    # Practice guide rendering
+│   │   │   └── quest_painters.dart       # Quest reference rendering
+│   │   ├── screens/
+│   │   │   ├── opening_page.dart
+│   │   │   ├── home_page.dart
+│   │   │   ├── canvas_page.dart
+│   │   │   ├── learn_drawing_page.dart
+│   │   │   └── game/
+│   │   │       ├── game_home_page.dart   # InkQuest hub
+│   │   │       ├── profile_view.dart     # Player progress and gallery
+│   │   │       ├── quest_board_view.dart # Challenge selection
+│   │   │       ├── quest_play_page.dart  # Quest drawing and scoring
+│   │   │       └── shop_view.dart
+│   │   ├── services/
+│   │   │   ├── download.dart             # Platform-conditional download export
+│   │   │   ├── download_io.dart
+│   │   │   ├── download_stub.dart
+│   │   │   ├── download_web.dart
+│   │   │   ├── png_export.dart            # Raster export at multiple scales
+│   │   │   ├── practice_reference.dart    # Practice guide generation
+│   │   │   ├── svg_document.dart          # SVG serialization
+│   │   │   └── svg_similarity.dart        # Drawing similarity scoring
+│   │   ├── state/
+│   │   │   ├── drawing_store.dart         # Recent drawings
+│   │   │   ├── player_state.dart          # Coins, XP, stars, streaks, unlocks
+│   │   │   └── recent_colors_store.dart
+│   │   └── widgets/
+│   │       ├── canvas/
+│   │       │   ├── canvas_size_picker.dart
+│   │       │   ├── canvas_widgets.dart
+│   │       │   └── color_picker.dart
+│   │       ├── common/
+│   │       │   └── h_scroll.dart
+│   │       ├── game/
+│   │       │   ├── game_common.dart
+│   │       │   └── inkquest_home_entry.dart
+│   │       └── home/
+│   │           ├── quick_action_card.dart
+│   │           └── recent_card.dart
+│   ├── test/
+│   │   └── widget_test.dart               # Widget tests
+│   ├── android/                           # Android host project, manifests, and icons
+│   ├── web/                               # Web host, PWA manifest, and icons
+│   ├── analysis_options.yaml
+│   └── pubspec.yaml                       # Flutter app package
+├── docker/
+│   └── dev-entrypoint.sh                  # Xvfb, noVNC, and Android emulator bootstrap
+├── .devcontainer/
+│   └── devcontainer.json                  # VS Code Dev Container configuration
+├── Dockerfile                             # Flutter + Android SDK development image
+├── docker-compose.yml                     # Development environment service
+├── pubspec.yaml                           # Melos workspace root
+├── pubspec.lock
+├── run.md                                 # Additional run instructions
+├── InkStudio.apk                          # Prebuilt Android package
+├── README.md
+├── .gitignore
+└── .dockerignore
 ```
 
----
+Generated and local-only directories such as `.dart_tool/`,
+`app/build/`, `app/android/.gradle/`, and `app/android/local.properties`
+are omitted above.
+
+------------------------------------------------------------------------
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) (>= 3.12.0)
-- Android Studio / Android SDK (for Android device/emulator targets)
-- [Melos](https://melos.invertase.dev/) (optional, for workspace scripts)
+-   [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.44.0
+    (Dart 3.12 or newer)
+-   Android Studio and the Android SDK for Android device/emulator
+    targets
+-   [Melos](https://melos.invertase.dev/) 8.x (optional, for workspace
+    scripts)
+-   Docker (optional, for the containerized environment)
 
-### Installation & Run
+### Run Locally
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/abhi-b-1289/InkStudio.git
-   cd InkStudio
-   ```
+``` bash
+git clone https://github.com/abhi-b-1289/InkStudio.git
+cd InkStudio/app
+flutter pub get
+flutter run
+```
 
-2. Fetch dependencies:
-   ```bash
-   cd app
-   flutter pub get
-   ```
+To run in a desktop browser:
 
-3. Run the app:
-   ```bash
-   flutter run
-   ```
+``` bash
+flutter run -d chrome
+```
 
-### Docker / Dev Container Workflow
+### Analyze and Test
 
-You can run the entire development environment (including Android emulator via noVNC) through Docker Compose:
+``` bash
+cd app
+flutter analyze
+flutter test
+```
 
-```bash
+Or from the repository root with Melos:
+
+``` bash
+dart pub global activate melos
+melos bootstrap
+melos run analyze
+melos run test
+```
+
+Melos also provides `melos run format`, `melos run clean`, and
+`melos run verify` (format, analyze, and test in sequence).
+
+### Docker / Dev Container
+
+Start the development environment, including the Android emulator and
+noVNC display:
+
+``` bash
 docker compose up --build
 ```
-Open `http://localhost:6080/vnc.html` in your browser to view the containerized emulator display.
+
+Open `http://localhost:6080/vnc.html` to view the emulator, then run the
+app inside the container:
+
+``` bash
+cd app
+flutter run -d emulator-5554
+```
+
+See [run.md](run.md) for running the web build or a hot-reload web
+server through Docker without a local Flutter installation.
